@@ -8,6 +8,14 @@ import Nav from './components/Nav'
 import Footer from './components/Footer'
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
+import Type from './pages/Type';
+import Register from './pages/Register';
+import Profile from './pages/Profile';
+import TypeDetail from './pages/TypeDetail'
+import Food from './pages/Food';
+import FoodDetail from './pages/FoodDetail'
+import Animal from './pages/Animal';
+import Search from './pages/Search';
 
 
 import React from 'react';
@@ -18,10 +26,10 @@ const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
     root: {
-        display: 'flex',
+        flexGrow: 1,
     },
     drawer: {
-        [theme.breakpoints.up('sm')]: {
+        [theme.breakpoints.up('md')]: {
             width: drawerWidth,
             flexShrink: 0,
         },
@@ -42,6 +50,15 @@ const useStyles = makeStyles((theme) => ({
     },
     content: {
         flexGrow: 1,
+        position: "relative",
+        minHeight: "100vh",
+        [theme.breakpoints.up("sm")]: {
+            marginLeft: drawerWidth,
+            width: `calc(100% - ${drawerWidth}px)`
+        }
+    },
+    contentWarp: {
+        paddingBottom: "2.5rem",
         padding: theme.spacing(3),
     },
 }));
@@ -54,27 +71,44 @@ export default function App() {
             <div className={classes.root}>
                 <CssBaseline />
                 <Nav />
-                <main className={classes.content}>
+                <div className={classes.content}>
                     <div className={classes.toolbar} />
-                    <Switch>
-                        <Route exact path="/">
-                            <Dashboard />
-                        </Route>
-                        <Route path="/login">
-                            <Login />
-                        </Route>
-                        <Route path="/animal">
-                            <h1>animal</h1>
-                        </Route>
-                        <Route path="/animalrecord">
-                            <h1>animalrecord</h1>
-                        </Route>
-                        <Route path="/search">
-                            <h1>search</h1>
-                        </Route>
-                    </Switch>
+                    <div className={classes.contentWarp}>
+                        <Switch>
+                            <Route exact path="/">
+                                <Dashboard />
+                            </Route>
+                            <Route path="/login">
+                                <Login />
+                            </Route>
+                            <Route path="/register">
+                                <Register />
+                            </Route>
+                            <Route path="/profile">
+                                <Profile />
+                            </Route>
+                            <Route path="/types">
+                                <Type />
+                            </Route>
+                            <Route path="/type/:id">
+                                <TypeDetail />
+                            </Route>
+                            <Route path="/foods">
+                                <Food />
+                            </Route>
+                            <Route path="/food/:id">
+                                <FoodDetail />
+                            </Route>
+                            <Route path="/search">
+                                <Search />
+                            </Route>
+                            <Route path="/animals">
+                                <Animal />
+                            </Route>
+                        </Switch>
+                    </div>
                     <Footer />
-                </main>
+                </div>
             </div>
         </Router>
     );

@@ -1,35 +1,104 @@
-import {
-    NavLink
-} from 'react-router-dom';
-
-import React, { Fragment } from 'react';
+import MaterialUICollapseMenu from 'material-ui-collapse-menu'
+import React, { Fragment, useState } from 'react';
 import AppBar from '@material-ui/core/AppBar';
-import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
 import Hidden from '@material-ui/core/Hidden';
 import IconButton from '@material-ui/core/IconButton';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
 import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import PetsIcon from '@material-ui/icons/Pets';
-import LoyaltyIcon from '@material-ui/icons/Loyalty';
-import SearchIcon from '@material-ui/icons/Search';
-import DashboardIcon from '@material-ui/icons/Dashboard';
-// import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-
-
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import MenuItem from '@material-ui/core/MenuItem';
+import Menu from '@material-ui/core/Menu';
+import Link from '@material-ui/core/Link';
+import {
+    Link as RouterLink,
+} from 'react-router-dom';
+import Divider from '@material-ui/core/Divider';
 
 export default function Nav(props) {
+    const [items] = useState([
+        {
+            "id": 1,
+            "title": "",
+            "items": [
+                {
+                    "id": "dashboard",
+                    "icon": "dashboard",
+                    "name": "สรุป",
+                    "link": "/"
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "title": "",
+            "items": [
+                {
+                    "id": "manage",
+                    "icon": "border_color",
+                    "name": "การจัดการ",
+                    "subitems": [
+                        {
+                            "id": "manage1",
+                            "icon": "category",
+                            "name": "ประเภทสัตว์",
+                            "link": "/types"
+                        },
+                        {
+                            "id": "manage2",
+                            "icon": "restaurant",
+                            "name": "อาหารสัตว์",
+                            "link": "/foods"
+                        },
+                        {
+                            "id": "manage3",
+                            "icon": "pets",
+                            "name": "สัตว์",
+                            "link": "/animals"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "title": "",
+            "items": [
+                {
+                    "id": "search",
+                    "icon": "search",
+                    "name": "ค้นหาสัตว์",
+                    "link": "/search"
+                }
+            ]
+        }
+    ])
+    const [auth] = useState(true);
+    const [anchorEl, setAnchorEl] = useState(null);
+    const open = Boolean(anchorEl);
+
+    const handleMenu = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
     const drawerWidth = 240;
 
     const useStyles = makeStyles((theme) => ({
         root: {
-            display: 'flex',
+            flexGrow: 1,
+        },
+        title: {
+            flexGrow: 1,
+            color: "#FFFFFF",
+        },
+        user: {
+            color: "#FFFFFF",
         },
         drawer: {
             [theme.breakpoints.up('sm')]: {
@@ -42,6 +111,7 @@ export default function Nav(props) {
         },
         menuButton: {
             marginRight: theme.spacing(2),
+            color: "#FFFFFF",
             [theme.breakpoints.up('sm')]: {
                 display: 'none',
             },
@@ -53,53 +123,38 @@ export default function Nav(props) {
         },
         content: {
             flexGrow: 1,
+            position: "relative",
+            minHeight: "100vh",
+            [theme.breakpoints.up("sm")]: {
+                marginLeft: drawerWidth,
+                width: `calc(100% - ${drawerWidth}px)`
+            }
+        },
+        contentWarp: {
+            paddingBottom: "2.5rem",
             padding: theme.spacing(3),
         },
     }));
     const { window } = props;
     const classes = useStyles();
     const theme = useTheme();
-    const [mobileOpen, setMobileOpen] = React.useState(false);
+    const [mobileOpen, setMobileOpen] = useState(false);
 
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
     };
 
-    const menuList = {
-        'Dashboard': ['/', <DashboardIcon />],
-        'Animal': ["/animal", <PetsIcon />],
-        "AnimalRecord": ["/animalrecord", <LoyaltyIcon />],
-        'Search': ["/search", <SearchIcon />],
-    }
     const drawer = (
         <div>
             <div className={classes.toolbar} />
-            {/* <Divider />
-            <List>
-                {["Profile"].map((text) => (
-                    <ListItem button key={text}>
-                        <ListItemIcon>{<AccountCircleIcon />}</ListItemIcon>
-                        <ListItemText primary={text} />
-                    </ListItem>
-                ))}
-            </List> */}
             <Divider />
-            <List>
-                {Object.keys(menuList).map((key, index) => (
-                    <NavLink style={{ textDecoration: "none", color: "black" }} to={menuList[key][0]}>
-                        <ListItem button key={key}>
-                            <ListItemIcon>{menuList[key][1]}</ListItemIcon>
-                            <ListItemText primary={key} />
-                        </ListItem>
-                    </NavLink>
-                ))}
-            </List>
+            <MaterialUICollapseMenu items={items} />
         </div>
     );
     const container = window !== undefined ? () => window().document.body : undefined;
 
     return (
-        <Fragment>
+        <Fragment className={classes.root}>
             <AppBar position="fixed" className={classes.appBar}>
                 <Toolbar>
                     <IconButton
@@ -111,9 +166,49 @@ export default function Nav(props) {
                     >
                         <MenuIcon />
                     </IconButton>
-                    <Typography variant="h6" noWrap>
-                        Animalfarm
+                    <Typography component={Link} underline='none' href='/' variant="h5" className={classes.title} noWrap>
+                        AnimalFarm
                     </Typography>
+                    {auth && (
+                        <div>
+                            <IconButton
+                                aria-label="account of current user"
+                                aria-controls="menu-appbar"
+                                aria-haspopup="true"
+                                onClick={handleMenu}
+                                color="inherit"
+                                className={classes.user}
+                            >
+                                <AccountCircle />
+                                <Typography>
+                                    &nbsp;สวัสดี, Prayuth
+                                    {/* Hi , <name> */}
+                                </Typography>
+                            </IconButton>
+                            <Menu
+                                id="menu-appbar"
+                                anchorEl={anchorEl}
+                                anchorOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
+                                }}
+                                keepMounted
+                                transformOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
+                                }}
+                                open={open}
+                                onClose={handleClose}
+                            >
+                                <MenuItem onClick={handleClose}>
+                                    <Link component={RouterLink} to="/profile">บัญชีของฉัน</Link>
+                                </MenuItem>
+                                <MenuItem onClick={handleClose}>
+                                    <Link component={RouterLink} to="/logout">ออกจากระบบ</Link>
+                                </MenuItem>
+                            </Menu>
+                        </div>
+                    )}
                 </Toolbar>
             </AppBar>
             <nav className={classes.drawer} aria-label="menubar">
