@@ -10,7 +10,7 @@ export default function Footer() {
     return (
         <div style={footer}>
             <Typography variant="body2" color="textSecondary" align="center">
-                CopyRight © 2020 - {new Date().getFullYear()} UBU student
+                CopyRight © 2020 - {new Date().getFullYear()} UBU student.
             </Typography>
         </div>
     )
