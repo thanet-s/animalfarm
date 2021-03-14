@@ -1,23 +1,19 @@
 import {
-    HashRouter as Router,
     Route,
     Switch
 } from 'react-router-dom';
 
-import Nav from './components/Nav'
-import Footer from './components/Footer'
+import Nav from './components/Nav';
+import Footer from './components/Footer';
 import Dashboard from './pages/Dashboard';
-import Login from './pages/Login';
 import Type from './pages/Type';
-import Register from './pages/Register';
 import Profile from './pages/Profile';
-import TypeDetail from './pages/TypeDetail'
+import TypeDetail from './pages/TypeDetail';
 import Food from './pages/Food';
-import FoodDetail from './pages/FoodDetail'
+import FoodDetail from './pages/FoodDetail';
 import Animal from './pages/Animal';
 import Search from './pages/Search';
-
-
+import AnimalDetail from './pages/AnimalDetail';
 import React from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { makeStyles } from '@material-ui/core/styles';
@@ -65,51 +61,47 @@ const useStyles = makeStyles((theme) => ({
 
 export default function App() {
     const classes = useStyles();
-
     return (
-        <Router>
-            <div className={classes.root}>
-                <CssBaseline />
-                <Nav />
-                <div className={classes.content}>
-                    <div className={classes.toolbar} />
-                    <div className={classes.contentWarp}>
-                        <Switch>
-                            <Route exact path="/">
-                                <Dashboard />
-                            </Route>
-                            <Route path="/login">
-                                <Login />
-                            </Route>
-                            <Route path="/register">
-                                <Register />
-                            </Route>
-                            <Route path="/profile">
-                                <Profile />
-                            </Route>
-                            <Route path="/types">
-                                <Type />
-                            </Route>
-                            <Route path="/type/:id">
-                                <TypeDetail />
-                            </Route>
-                            <Route path="/foods">
-                                <Food />
-                            </Route>
-                            <Route path="/food/:id">
-                                <FoodDetail />
-                            </Route>
-                            <Route path="/search">
-                                <Search />
-                            </Route>
-                            <Route path="/animals">
-                                <Animal />
-                            </Route>
-                        </Switch>
-                    </div>
-                    <Footer />
+        // <Router>
+        <div className={classes.root}>
+            <CssBaseline />
+            <Nav />
+            <div className={classes.content}>
+                <div className={classes.toolbar} />
+                <div className={classes.contentWarp}>
+                    <Switch>
+                        <Route exact path="/">
+                            <Dashboard />
+                        </Route>
+                        <Route path="/profile">
+                            <Profile />
+                        </Route>
+                        <Route path="/types">
+                            <Type />
+                        </Route>
+                        <Route path="/type/:id" >
+                            <TypeDetail />
+                        </Route>
+                        <Route path="/foods">
+                            <Food />
+                        </Route>
+                        <Route path="/food/:id">
+                            <FoodDetail />
+                        </Route>
+                        <Route path="/search">
+                            <Search />
+                        </Route>
+                        <Route path="/animals">
+                            <Animal />
+                        </Route>
+                        <Route path="/animal/:id">
+                            <AnimalDetail />
+                        </Route>
+                    </Switch>
                 </div>
+                <Footer />
             </div>
-        </Router>
+        </div>
+        // </Router>
     );
 }

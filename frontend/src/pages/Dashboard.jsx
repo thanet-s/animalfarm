@@ -26,31 +26,29 @@ export default function Dashboard() {
                     <Typography variant="h4" component="h1" align='center' gutterBottom>
                         Dashboard
                     </Typography>
-                    <Grid container spacing={3}>
+                    <Grid container spacing={3}>    
                         <Grid item xs={12}>
-                            <Paper className={classes.paper}>xs=12</Paper>
+                            <Paper className={classes.paper}>เวลาที่เพิ่ม</Paper>
                         </Grid>
-                        <Grid item xs={12}>
-                            <Paper className={classes.paper}>xs=12</Paper>
+                        <Grid item xs={4}>
+                            <Typography variant="h4" component="h1" align='center' gutterBottom>
+                               ประเภทสัตว์ทั้งหมด
+                            </Typography>
+                            <Paper className={classes.paper}>5 ประเภท</Paper>
                         </Grid>
-                        <Grid item xs={6}>
-                            <Paper className={classes.paper}>xs=6</Paper>
+                        <Grid item xs={4}>
+                              <Typography variant="h4" component="h1" align='center' gutterBottom>
+                               อาหารสัตว์ทั้งหมด
+                              </Typography>
+                              <Paper className={classes.paper}>10 อย่าง</Paper>
                         </Grid>
-                        <Grid item xs={6}>
-                            <Paper className={classes.paper}>xs=6</Paper>
+                        <Grid item xs={4}>
+                            <Typography variant="h4" component="h1" align='center' gutterBottom>
+                               จำนวนสัตว์ทั้งหมด
+                              </Typography>
+                            <Paper className={classes.paper}>200 ตัว</Paper>
                         </Grid>
-                        <Grid item xs={3}>
-                            <Paper className={classes.paper}>xs=3</Paper>
-                        </Grid>
-                        <Grid item xs={3}>
-                            <Paper className={classes.paper}>xs=3</Paper>
-                        </Grid>
-                        <Grid item xs={3}>
-                            <Paper className={classes.paper}>xs=3</Paper>
-                        </Grid>
-                        <Grid item xs={3}>
-                            <Paper className={classes.paper}>xs=3</Paper>
-                        </Grid>
+                       
                     </Grid>
                 </div>
             </Container>

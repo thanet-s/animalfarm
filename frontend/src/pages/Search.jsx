@@ -161,7 +161,7 @@ export default function Type() {
                                     </TableCell>
                                     <TableCell>{row.name}</TableCell>
                                     <TableCell align="right">
-                                        <Link to={`/type/${row.id}`}>
+                                        <Link to={`/animalsdetail/${row.id}`}>
                                             <Button
                                                 variant="contained"
                                                 color="secondary">

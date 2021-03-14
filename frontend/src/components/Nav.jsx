@@ -75,7 +75,6 @@ export default function Nav(props) {
             ]
         }
     ])
-    const [auth] = useState(true);
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
 
@@ -169,46 +168,7 @@ export default function Nav(props) {
                     <Typography component={Link} underline='none' href='/' variant="h5" className={classes.title} noWrap>
                         AnimalFarm
                     </Typography>
-                    {auth && (
-                        <div>
-                            <IconButton
-                                aria-label="account of current user"
-                                aria-controls="menu-appbar"
-                                aria-haspopup="true"
-                                onClick={handleMenu}
-                                color="inherit"
-                                className={classes.user}
-                            >
-                                <AccountCircle />
-                                <Typography>
-                                    &nbsp;สวัสดี, Prayuth
-                                    {/* Hi , <name> */}
-                                </Typography>
-                            </IconButton>
-                            <Menu
-                                id="menu-appbar"
-                                anchorEl={anchorEl}
-                                anchorOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
-                                }}
-                                keepMounted
-                                transformOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
-                                }}
-                                open={open}
-                                onClose={handleClose}
-                            >
-                                <MenuItem onClick={handleClose}>
-                                    <Link component={RouterLink} to="/profile">บัญชีของฉัน</Link>
-                                </MenuItem>
-                                <MenuItem onClick={handleClose}>
-                                    <Link component={RouterLink} to="/logout">ออกจากระบบ</Link>
-                                </MenuItem>
-                            </Menu>
-                        </div>
-                    )}
+                    
                 </Toolbar>
             </AppBar>
             <nav className={classes.drawer} aria-label="menubar">
