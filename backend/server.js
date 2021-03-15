@@ -52,7 +52,7 @@ app.get('/api/dashboard', async (req, res) => {
 app.post('/api/search', async (req, res) => {
     const body = req.body;
     console.log(body);
-    if (body.type == '1') {
+    if (body.type == '1') { //ประเภทสัตว์ทั้งหมด
         if (body.food == '1') {
             if (body.name == '') {
                 const animals = await Animal.find();
@@ -67,6 +67,24 @@ app.post('/api/search', async (req, res) => {
                 res.json({ animals: animals });
             } else {
                 const animals = await Animal.find({ name: { $regex: '.*' + body.name + '.*' }, foods: { "$in" : [body.food]} });
+                res.json({ animals: animals });
+            }
+        }
+    } else { //ประเภทสัตว์อื่นๆ
+        if (body.food == '1') {
+            if (body.name == '') {
+                const animals = await Animal.find({type: body.type});
+                res.json({ animals: animals });
+            } else {
+                const animals = await Animal.find({ name: { $regex: '.*' + body.name + '.*' }, type: body.type });
+                res.json({ animals: animals });
+            }
+        } else { //อาหารอื่นๆ
+            if (body.name == '') {
+                const animals = await Animal.find({foods: { "$in" : [body.food]}, type: body.type });
+                res.json({ animals: animals });
+            } else {
+                const animals = await Animal.find({ name: { $regex: '.*' + body.name + '.*' }, foods: { "$in" : [body.food]}, type: body.type });
                 res.json({ animals: animals });
             }
         }
