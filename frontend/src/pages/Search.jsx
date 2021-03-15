@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
@@ -19,7 +19,9 @@ import MenuItem from '@material-ui/core/MenuItem';
 import SearchIcon from '@material-ui/icons/Search';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-// If x = y : prinT(kuy)
+import axios from 'axios';
+import { Redirect } from "react-router-dom";
+
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
@@ -35,43 +37,84 @@ const useStyles = makeStyles((theme) => ({
         minWidth: 120,
     },
 }));
-function createData(id, name) {
-    return { id, name, };
-}
-// for i in range()
-const rows = [
-    createData(1, 'Frozen yoghurt'),
-    createData(2, 'Ice cream sandwich'),
-    createData(3, 'Eclair'),
-    createData(4, 'Cupcake'),
-    createData(5, 'Gingerbread'),
-];
+
 
 export default function Type() {
     const classes = useStyles();
     const [value, setValue] = useState('');
+    const [types, setTypes] = useState([{ _id: 1, name: "ทั้งหมด" }]);
+    const [type, setType] = useState("");
+    const [show, setShow] = useState([]);
+    const [foods, setFoods] = useState([{ _id: 1, name: "ทั้งหมด" }]);
+    const [food, setFood] = useState("");
+    const [rows, setRows] = useState([]);
+    let id = 1;
+
     function handleChange(event) {
         setValue(event.target.value)
     }
+    function handleChangeType(event) {
+        setType(event.target.value)
+    }
+    function handleChangeFood(event) {
+        setFood(event.target.value)
+    }
     function handleSubmit(event) {
         event.preventDefault();
-        if (value !== '') {
-            alert('A name was submitted: ' + value);
-        } else {
-            alert(`กรุณากรอกข้อมูล`);
+        if(type !== "" && food !== ""){
+           
+            const alldata = {
+                "type":type,
+                "food":food,
+                "name":value
+            }
+            axios.post("/api/search", alldata).then(res => {
+                if(res.status === 200){
+                    setShow(res.data.animals);
+                    
+                } else{
+                  alert(res.data.msg);
+                }
+              });
+        } else{
+            alert("กรุณาเลือกประเภทสัตว์ และอาหารสัตว์");
         }
-
     }
+
+    useEffect(() => {
+        const fetchtype = async () => {
+            axios.get('/api/type/types').then(res => {
+                if (res.status === 200) {
+                    setTypes(res.data.types);
+
+                }
+            })
+
+        };
+        const fetchfood = async () => {
+            axios.get('/api/food/all').then(res => {
+                if (res.status === 200) {
+                    setFoods(res.data.foods);
+
+                }
+            })
+
+        };
+        fetchtype();
+        fetchfood();
+
+    }, []);
+    
     return (
         <Container maxWidth="xl">
             <div className={classes.root}>
                 <Typography variant="h4" component="h1" align='center' gutterBottom>
-                    ค้นหาสัตว์ 
+                    ค้นหาสัตว์
                 </Typography>
                 <Typography variant="h5" component="h3" align='left' gutterBottom>
                     เลือกประเภทสัตว์/เลือกอาหารสัตว์/กรอกชื่อสัตว์
                 </Typography>
-                 
+
                 <form noValidate onSubmit={handleSubmit}>
                     <Grid container spacing={1}>
                         <Grid item xs={12} md={4} alignItems="stretch" >
@@ -80,16 +123,16 @@ export default function Type() {
                                 <Select
                                     labelId="demo-simple-select-outlined-label"
                                     id="demo-simple-select-outlined"
-                                    // value={age}
-                                    onChange={handleChange}
+                                    onChange={handleChangeType}
                                     label="animalType"
                                 >
-                                    <MenuItem value="">
-                                        <em>เลือกประเภทสัตว์</em>
+                                    <MenuItem value="1">
+                                        <em>ทั้งหมด</em>
                                     </MenuItem>
-                                    <MenuItem value={10}>วัว</MenuItem>
-                                    <MenuItem value={20}>กระต่าย</MenuItem>
-                                    <MenuItem value={30}>หมู</MenuItem>
+                                    {types.map((t) => (
+                                        <MenuItem value={t._id}>{t.name}</MenuItem>
+                                    ))
+                                    }
                                 </Select>
                             </FormControl>
                         </Grid>
@@ -99,16 +142,16 @@ export default function Type() {
                                 <Select
                                     labelId="demo-simple-select-outlined-label"
                                     id="demo-simple-select-outlined"
-                                    // value={age}
-                                    onChange={handleChange}
+                                    onChange={handleChangeFood}
                                     label="Age"
                                 >
-                                    <MenuItem value="">
-                                        <em>เลือกอาหารสัตว์</em>
+                                    <MenuItem value="1">
+                                        <em>ทั้งหมด</em>
                                     </MenuItem>
-                                    <MenuItem value={10}>แครรอท</MenuItem>
-                                    <MenuItem value={20}>หญ้าสีเขียว</MenuItem>
-                                    <MenuItem value={30}>เพ็ดดีกรี</MenuItem>
+                                    {foods.map((f) => (
+                                        <MenuItem value={f._id}>{f.name}</MenuItem>
+                                    ))
+                                    }
                                 </Select>
                             </FormControl>
                         </Grid>
@@ -130,6 +173,7 @@ export default function Type() {
                         <Grid item xs={12} md={2} alignItems="stretch" >
                             <FormControl variant="outlined" className={classes.formControl} >
                                 <Button
+                                    type="submit"
                                     variant="contained"
                                     color="secondary"
                                     size="large"
@@ -149,19 +193,19 @@ export default function Type() {
                         <TableHead>
                             <TableRow>
                                 <TableCell style={{ "fontWeight": "1000" }}>ลำดับ</TableCell>
-                                <TableCell style={{ "fontWeight": "1000" }}>ประเภทสัตว์</TableCell>
+                                <TableCell style={{ "fontWeight": "1000" }}>ชื่อสัตว์</TableCell>
                                 <TableCell style={{ "fontWeight": "1000" }} align="right">แก้ไข</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {rows.map((row) => (
+                            {show.map((row) => (
                                 <TableRow key={row.name}>
                                     <TableCell component="th" scope="row" align="left">
-                                        {row.id}
+                                        {id++}
                                     </TableCell>
                                     <TableCell>{row.name}</TableCell>
                                     <TableCell align="right">
-                                        <Link to={`/animalsdetail/${row.id}`}>
+                                        <Link to={`/animal/${row._id}`}>
                                             <Button
                                                 variant="contained"
                                                 color="secondary">

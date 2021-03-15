@@ -15,7 +15,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import TextareaAutosize from '@material-ui/core/TextareaAutosize';
-
+import { Redirect } from "react-router-dom";
 // test import code, if not use you can delete it
 
 // end test import code
@@ -60,6 +60,8 @@ export default function Animal() {
     // hook state for age --> age is value of select tag !!! 
     const [type, setType] = React.useState('');
     const [food, setFood] = useState({});
+    const [refresh, setRefresh] = useState(false);
+    const [ids, setIds] = useState("");
 
     // set state of type
     const handleChangeType = (event) => {
@@ -144,7 +146,8 @@ export default function Animal() {
             axios.post('/api/animal/add', animalData).then(res => {
                 if(res.status === 200){
                   alert(res.data.msg);
-      
+                  setIds(res.data.id);
+                  setRefresh(true);
                 } else{
                   alert(res.data.msg);
                 }
@@ -156,7 +159,7 @@ export default function Animal() {
 
     }
    
-    return (
+    return <div>{refresh ? (<Redirect to={`/animal/${ids}`} />) : (
         <React.Fragment>
             <Container maxWidth="sm">
                 <div className={classes.root}>
@@ -200,7 +203,7 @@ export default function Animal() {
                                         id="demo-simple-select-placeholder-label"
                                         fullWidth
                                         align='center'
-                                        defaultValue={types[0]._id}
+                                        // value={types[0]._id}
                                         onChange={handleChangeType}
                                         className={classes.selectEmpty}
                                     >
@@ -298,5 +301,7 @@ export default function Animal() {
                 </div>
             </Container>
         </React.Fragment>
-    );
+        )
+    }</div>
+    
 }

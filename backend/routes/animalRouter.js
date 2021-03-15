@@ -1,7 +1,19 @@
 import express from 'express';
 import Animal from '../models/Animal';
+import Food from '../models/Food';
 
 const router = express.Router();
+
+function removeArr(arr) {
+    var what, a = arguments, L = a.length, ax;
+    while (L > 1 && arr.length) {
+        what = a[--L];
+        while ((ax= arr.indexOf(what)) !== -1) {
+            arr.splice(ax, 1);
+        }
+    }
+    return arr;
+}
 
 router.post('/add', async (req, res) => {
     const body = req.body;
@@ -21,12 +33,18 @@ router.post('/add', async (req, res) => {
                 desc: body.desc
             });
             animal.save();
+            const fs = body.foods
+            fs.map(async fId => {
+                let food = await Food.findById(fId);
+                food.animals.push(animal._id);
+                food.save();
+            });
             res.json({ msg: 'เพิ่มสำเร็จ', id: animal._id });
         }
     });
 });
 
-router.get('/all', async (req, res) => {
+router.get('/get/all', async (req, res) => {
     const animals = await Animal.find();
     res.json({ animals: animals });
 });
@@ -48,6 +66,7 @@ router.get('/:id', async (req, res) => {
 
 router.post('/edit/:id', async (req, res) => {
     const body = req.body;
+    console.log(body);
     await Animal.findById(req.params.id, (err, animal) => {
         if (animal) {
             animal.name = body.name;
@@ -65,11 +84,24 @@ router.post('/edit/:id', async (req, res) => {
 
 router.post('/remove/:id', async (req, res) => {
     const id = req.params.id;
-    await Animal.deleteOne({ _id: id }, err => {
+    await Animal.findOne({ _id: id }, async (err, animal) => {
         if (err) {
             res.status(500).json({ msg: err });
         } else {
-            res.json({ msg: 'ทำการลบสำเร็จ' });
+            const fs = animal.foods;
+            fs.map(async fId => {
+                let food = await Food.findById(fId);
+                const newArr = removeArr(food.animals, animal._id);
+                food.animals = newArr;
+                food.save();
+            });
+            await Animal.deleteOne({ _id: id }, err => {
+                if (err) {
+                    res.status(500).json({ msg: err });
+                } else {
+                    res.json({ msg: 'ทำการลบสำเร็จ' });
+                }
+            });
         }
     });
 });

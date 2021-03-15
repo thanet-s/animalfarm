@@ -9,6 +9,10 @@ import typeRouter from './routes/typeRouter';
 import foodRouter from './routes/foodRouter';
 import animalRouter from './routes/animalRouter';
 
+import Type from './models/Type';
+import Food from './models/Food';
+import Animal from './models/Animal';
+
 const app = express();
 const port = 3001;
 dotenv.config();
@@ -36,6 +40,29 @@ app.use(bodyParser.json());
 
 app.get('/api/', async (req, res) => {
     res.send('Welcom to Animalfarm API!');
+});
+
+app.get('/api/dashboard', async (req, res) => {
+    const types = await Type.countDocuments();
+    const foods = await Food.countDocuments();
+    const animals = await Animal.countDocuments();
+    res.json({ types: types, foods: foods, animals: animals });
+});
+
+app.post('/api/search', async (req, res) => {
+    const body = req.body;
+    console.log(body);
+    if (body.type == '1') {
+        if (body.food == '1') {
+            if (body.name == '') {
+                const animals = await Animal.find();
+                res.json({ animals: animals });
+            } else {
+                const animals = await Animal.find({name: body.name});
+                res.json({ animals: animals });
+            }
+        }
+    }
 });
 
 // app.use('/api/users', userRouter);

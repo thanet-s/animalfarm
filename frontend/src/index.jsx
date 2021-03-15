@@ -1,7 +1,7 @@
 import { render } from 'react-dom';
 import App from './App';
 import {
-  BrowserRouter as Router,
+  HashRouter as Router,
 } from 'react-router-dom';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import green from '@material-ui/core/colors/green';
