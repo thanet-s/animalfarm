@@ -58,7 +58,15 @@ app.post('/api/search', async (req, res) => {
                 const animals = await Animal.find();
                 res.json({ animals: animals });
             } else {
-                const animals = await Animal.find({name: body.name});
+                const animals = await Animal.find({ name: body.name });
+                res.json({ animals: animals });
+            }
+        } else { //อาหารอื่นๆ
+            if (body.name == '') {
+                const animals = await Animal.find({foods: { "$in" : [body.food]} });
+                res.json({ animals: animals });
+            } else {
+                const animals = await Animal.find({ name: body.name, foods: { "$in" : [body.food]} });
                 res.json({ animals: animals });
             }
         }
