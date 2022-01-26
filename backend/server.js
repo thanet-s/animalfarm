@@ -1,7 +1,7 @@
 import express from 'express';
 // import session from 'express-session';
 // import MongoStore from 'connect-mongo';
-import dotenv from 'dotenv';
+// import dotenv from 'dotenv';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 // import userRouter from './routes/userRouter';
@@ -15,9 +15,9 @@ import Animal from './models/Animal';
 
 const app = express();
 const port = 3001;
-dotenv.config();
+// dotenv.config();
 
-const mongourl = `mongodb://${process.env.DB_USER}:${process.env.DB_PASS}@127.0.0.1/animalfarm?authSource=admin`;
+const mongourl = `mongodb://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_HOST}/animalfarm?authSource=admin`;
 mongoose.connect(mongourl, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
